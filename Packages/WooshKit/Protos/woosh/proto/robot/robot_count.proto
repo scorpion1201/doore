@@ -1,0 +1,104 @@
+// recovered from embedded descriptor at file offset 0x4c8bc0 (1562 bytes)
+syntax = "proto3";
+package woosh.robot.count;
+
+import "woosh/proto/util/common.proto";
+import "woosh/proto/util/action.proto";
+import "woosh/proto/util/robot.proto";
+
+message StatusCode {
+  enum Level {
+    kNormal = 0;
+    kTips = 1;
+    kWarn = 2;
+    kFault = 3;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  uint64 code = 1;
+  uint64 time = 2;
+  string msg = 3;
+  int64 robot_task_id = 4;
+  woosh.robot.State state = 5;
+  woosh.action.Type type = 6;
+  woosh.robot.count.StatusCode.Level level = 11;
+}
+
+message StatusCodes {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  repeated woosh.robot.count.StatusCode scs = 1;
+}
+
+message AbnormalCodes {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  repeated woosh.robot.count.StatusCode scs = 1;
+}
+
+message Operation {
+  message Mileage {
+    uint32 start = 1;
+    uint32 end = 2;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  uint32 id = 1;
+  uint32 date = 2;
+  woosh.robot.count.Operation.Mileage mileage = 4;
+  repeated woosh.common.TimeBucket buckets = 5;
+  uint32 distance = 11;
+  uint32 uptime = 12;
+  bool end = 99;
+}
+
+message Operations {
+  repeated woosh.robot.count.Operation ops = 1;
+}
+
+message Task {
+  enum State {
+    kExecuting = 0;
+    kCompleted = 1;
+    kFailed = 2;
+    kCancel = 3;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  uint32 id = 1;
+  int64 task_id = 2;
+  string dest = 3;
+  woosh.robot.count.Task.State state = 4;
+  woosh.common.TimeBucket bucket = 5;
+  uint32 cons = 11;
+  bool end = 99;
+}
+
+message Tasks {
+  repeated woosh.robot.count.Task ts = 1;
+}
+
+message Status {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  uint32 id = 1;
+  woosh.robot.count.StatusCode info = 2;
+  woosh.common.TimeBucket bucket = 5;
+  uint32 cons = 11;
+  bool end = 99;
+}
+
+message Statuses {
+  repeated woosh.robot.count.Status ss = 1;
+}
+
+message Abnormals {
+  repeated woosh.robot.count.Status ss = 1;
+}
+

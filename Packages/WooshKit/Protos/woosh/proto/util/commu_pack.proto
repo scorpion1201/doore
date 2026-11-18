@@ -1,0 +1,51 @@
+// recovered from embedded descriptor at file offset 0x4bd4a0 (673 bytes)
+syntax = "proto3";
+package woosh.commu_pack;
+
+import "google/protobuf/any.proto";
+
+message MessagePack {
+  google.protobuf.Any body = 1;
+  bool ok = 101;
+  string msg = 102;
+}
+
+message Subscription {
+  bool sub = 1;
+  repeated string topics = 11;
+}
+
+message RequestPackJson {
+  string type = 1;
+  google.protobuf.Any body = 2;
+}
+
+message ResponsePackJson {
+  string type = 1;
+  google.protobuf.Any body = 2;
+  bool ok = 101;
+  string msg = 102;
+}
+
+message NotifyPackJson {
+  string type = 1;
+  google.protobuf.Any body = 2;
+}
+
+message MessagePackJson {
+  string type = 1;
+  google.protobuf.Any body = 2;
+  bool ok = 101;
+  string msg = 102;
+  int32 sn = 201;
+  int32 timestamp = 202;
+}
+
+message Ping {
+  int32 timestamp = 1;
+}
+
+message Pong {
+  int32 timestamp = 1;
+}
+

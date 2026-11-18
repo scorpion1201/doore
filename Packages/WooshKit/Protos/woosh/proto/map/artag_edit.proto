@@ -1,0 +1,26 @@
+// recovered from embedded descriptor at file offset 0x4c3260 (326 bytes)
+syntax = "proto3";
+package woosh.map.mark.artag;
+
+import "woosh/proto/map/mark.proto";
+
+message Create {
+  woosh.map.mark.ARTag artag = 1;
+}
+
+message Delete {
+  uint32 id = 1;
+}
+
+message Update {
+  woosh.map.mark.ARTag artag = 1;
+}
+
+message Find {
+  string no = 1;
+}
+
+message ARTags {
+  repeated woosh.map.mark.ARTag artags = 1;
+}
+

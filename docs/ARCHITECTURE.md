@@ -2,13 +2,13 @@
 
 This document gives agents and contributors a fast, complete picture of how the 두레 codebase is put together: where things live, which part talks to which, and where the boundaries are. Its sections follow the [architecture.md](https://architecture.md/) template.
 
-**Nothing is built yet.** Until the first implementation task lands, this describes the structure the code must take. Update this document as the codebase evolves.
+The native app links WooshKit as a local Swift package. Generated Swift types and their restored schemas are checked in together. The release and real-robot criteria remain in the specification.
 
 What the app must do, and every detail of the robot protocol, is in the [specification](plans/00-initialize-app.spec.md). What the user sees is in [DESIGN.md](DESIGN.md).
 
 ## 1. Project Structure
 
-The tree is grouped by layer. Only `README.md`, `LICENSE`, `CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, `assets/` and `docs/` exist today.
+The tree is grouped by layer.
 
 ```
 README.md                    what 두레 is, for people
@@ -37,7 +37,7 @@ Doore/                       the app
 DooreTests/                  app-level tests
 Packages/
   WooshKit/                  the robot client, a Swift package with no UI imports
-    Protos/                  restored .proto files (not yet in the repository)
+    Protos/                  restored .proto files in their original import hierarchy
     Sources/WooshKit/        generated messages, transport, session, models
     Sources/WooshKitTesting/ FakeRobotTransport and canned robot data
     Tests/WooshKitTests/
@@ -52,7 +52,7 @@ Packages/
 | `Doore/Resources/` | Asset catalog and one string catalog | Korean source, with `zh-Hans` and `en` values |
 | `Packages/WooshKit/Sources/WooshKit/` | Generated message types, `RobotTransport`, `WebSocketTransport`, `RobotSession`, screen-facing models | Imports no SwiftUI, UIKit or AppKit. Generated Swift is checked in, so a build needs no `protoc` |
 | `Packages/WooshKit/Sources/WooshKitTesting/` | `FakeRobotTransport` and canned robot data | Used by unit tests, SwiftUI previews and running without a robot |
-| `Packages/WooshKit/Protos/` | The 25 restored `.proto` files | Not yet in the repository: [spec § 13.2](plans/00-initialize-app.spec.md#132-inputs-that-are-not-in-this-repository-yet) |
+| `Packages/WooshKit/Protos/` | The 25 restored `.proto` files | Generated with protoc 28.3 and SwiftProtobuf 1.29.0 |
 
 `WooshKit` is a working name. It names the protocol, not the product.
 
@@ -134,7 +134,7 @@ None. 두레 has no server of its own. The robot plays that role, and it is desc
 |---|---|
 | Messages | Swift types generated from the restored `.proto` files. One set of types serializes to JSON for the public API and to binary for the dedicated channel |
 | `RobotTransport` | The protocol below. One reply per request, and a stream of notifications |
-| `WebSocketTransport` | The default transport: JSON over the public API on port 5480 |
+| `WebSocketTransport` | JSON over the public API on port 5480. The socket and envelope decoder allow frames up to 64 MiB, including Base64-encoded scene images |
 | `RobotSession` | An `actor`. Connection lifetime, the initial sync order, subscriptions, matching replies to requests, reconnecting, repeating teleop commands |
 | Models | The screen-facing models of [spec § 8.1](plans/00-initialize-app.spec.md#81-screen-facing-models), built from messages |
 | `WooshKitTesting` | `FakeRobotTransport`, the third transport, which replays canned replies and notifications |
@@ -204,7 +204,7 @@ Two points are left to whoever implements the package, with one constraint each:
 - **Name:** Scene cache.
 - **Type:** Files in the app container's Caches folder.
 - **Purpose:** Showing the last known map quickly.
-- **Key contents:** one folder per robot number and scene name. Overwritten with robot data on every connection.
+- **Key contents:** one folder per reported robot number and encoded scene name. A successful live scene read atomically replaces its cached JSON. During initial sync, Monitor can draw the previously received map once the robot reports its identity and active map. Selections and commands use the live scene.
 
 ### 4.4. Scene being edited
 
@@ -223,7 +223,7 @@ Two points are left to whoever implements the package, with one constraint each:
 - **Name:** Status code table.
 - **Type:** A read-only resource in the app bundle.
 - **Purpose:** Recovery steps for each robot status code.
-- **Key contents:** not yet in the repository, and not to be added until the owner confirms it may be used ([spec § 13.2](plans/00-initialize-app.spec.md#132-inputs-that-are-not-in-this-repository-yet)).
+- **Key contents:** not yet in the repository, and not to be added until the owner confirms it may be used ([spec § 13.2](plans/00-initialize-app.spec.md#132-analysis-material)).
 
 ## 5. External Integrations / APIs
 

@@ -1,0 +1,27 @@
+// recovered from embedded descriptor at file offset 0x4c38a0 (378 bytes)
+syntax = "proto3";
+package woosh.map.mark.wormhole;
+
+import "woosh/proto/map/mark.proto";
+
+message Create {
+  woosh.map.mark.Wormhole wormhole = 1;
+  bool precision = 2;
+}
+
+message Delete {
+  string no = 1;
+}
+
+message Update {
+  woosh.map.mark.Wormhole wormhole = 1;
+}
+
+message Find {
+  string no = 1;
+}
+
+message Wormholes {
+  repeated woosh.map.mark.Wormhole wormholes = 1;
+}
+

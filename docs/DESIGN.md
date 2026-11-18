@@ -576,7 +576,7 @@ The original apps ship in Chinese and English. 두레 keeps both and adds Korean
 - **A string that exists only in 두레 has no original.** This covers the deviations listed for each screen and the messages of [§ 10](#10-empty-and-blocked-states). Write its Chinese and its English with the words the originals already use for the same things.
 - **Text the robot sends** — a reply's message, a name, a station number — is shown as received, in every language.
 
-The original string table is the `ui-text` folder of the analysis material. It lists every string of both apps in Chinese and English, by screen. It is not in this repository yet ([spec § 13.2](plans/00-initialize-app.spec.md#132-inputs-that-are-not-in-this-repository-yet)). Until it is, do not invent Chinese or English strings: ask for it.
+The supplied `ui-text` folder contains the original Chinese and English tables by screen. The application catalog uses the corresponding entries. Copy for labels absent from those tables requires separate source confirmation.
 
 ### 12.2 Glossary
 

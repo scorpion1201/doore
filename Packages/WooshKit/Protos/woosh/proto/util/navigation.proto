@@ -1,0 +1,60 @@
+// recovered from embedded descriptor at file offset 0x4bcb80 (918 bytes)
+syntax = "proto3";
+package woosh.nav;
+
+import "woosh/proto/util/common.proto";
+
+enum Mode {
+  kModeUndefined = 0;
+  kAvoid = 1;
+  kNavWait = 2;
+  kTimeout = 3;
+  kOvertime = 4;
+  kNarrow = 10;
+  kMagnetic = 11;
+  kQrcode = 12;
+}
+
+enum ArrType {
+  kArrTypeUndefined = 0;
+  kVague = 1;
+  kAccurate = 2;
+}
+
+message Path {
+  repeated woosh.common.Pose2D poses = 1;
+}
+
+message PlanPath {
+  enum Optimal {
+    kOptimalUndefined = 0;
+    kOptimal = 1;
+    kDestOptimal = 2;
+    kStrict = 9;
+  }
+  woosh.nav.Path path = 1;
+  uint32 map_id = 2;
+  uint32 wormhole_id = 3;
+  uint32 dest_map_id = 4;
+  woosh.common.Pose2D target = 5;
+  woosh.nav.PlanPath.Optimal optimal = 10;
+}
+
+message LocalPath {
+  message Point {
+    woosh.common.Pose2D pose = 1;
+    uint32 expend = 2;
+  }
+  repeated woosh.nav.LocalPath.Point points = 1;
+  int32 time = 11;
+}
+
+message ModeSetting {
+  woosh.nav.ArrType type = 1;
+  woosh.nav.Mode mode = 2;
+  uint32 wait_timeout = 3;
+  float max_speed = 4;
+  bool permitted_passage = 11;
+  int32 capacity = 12;
+}
+

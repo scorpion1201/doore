@@ -1,0 +1,73 @@
+// recovered from embedded descriptor at file offset 0x4cdce0 (1187 bytes)
+syntax = "proto3";
+package woosh.dispatch.robot;
+
+import "woosh/proto/util/common.proto";
+import "woosh/proto/task/task.proto";
+import "google/protobuf/any.proto";
+
+message Robot {
+  message Commu {
+    string ip = 1;
+    int32 port = 2;
+    bool online = 11;
+    int32 time = 12;
+  }
+  uint32 id = 1;
+  oneof publish {
+    bool signout = 299;
+  }
+  bool schedulable = 2;
+  woosh.dispatch.robot.Robot.Commu commu = 3;
+  int32 task_set_id = 21;
+  woosh.task.TaskBase task = 22;
+  woosh.common.Pose dest = 23;
+}
+
+message Robots {
+  repeated woosh.dispatch.robot.Robot robots = 1;
+}
+
+message Activity {
+  enum State {
+    kOnline = 0;
+    kOffline = 1;
+    kConnected = 2;
+    kDisconnected = 3;
+    kDropped = 4;
+  }
+  uint32 id = 1;
+  woosh.dispatch.robot.Activity.State state = 6;
+  int32 time = 7;
+  uint32 power = 11;
+  uint32 mileage = 12;
+}
+
+message Activitys {
+  repeated woosh.dispatch.robot.Activity activitys = 1;
+}
+
+message RobotAnyInfo {
+  enum Type {
+    kAll = 0;
+    kGeneral = 1;
+    kSetting = 2;
+    kSence = 3;
+    kCtrlMode = 4;
+    kState = 5;
+    kTask = 6;
+    kPoseSpeed = 7;
+    kBattery = 8;
+    kNetwork = 9;
+    kDeviceState = 10;
+    kProgramState = 11;
+    kHardwareState = 12;
+    kStatusCodes = 50;
+    kRobotModel = 52;
+    kAbnormalCodes = 53;
+  }
+  uint32 id = 1;
+  woosh.dispatch.robot.RobotAnyInfo.Type type = 2;
+  google.protobuf.Any info = 10;
+}
+

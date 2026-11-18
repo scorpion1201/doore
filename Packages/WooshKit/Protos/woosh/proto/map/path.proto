@@ -1,0 +1,23 @@
+// recovered from embedded descriptor at file offset 0x4c11e0 (409 bytes)
+syntax = "proto3";
+package woosh.map.path;
+
+import "woosh/proto/util/common.proto";
+
+message PathInfo {
+  repeated woosh.map.path.MonoPath mono_paths = 1;
+  repeated woosh.map.path.BidirectPath bidirect_paths = 2;
+}
+
+message MonoPath {
+  repeated woosh.common.Point path = 1;
+  float width = 2;
+  bool allow_avoid = 11;
+}
+
+message BidirectPath {
+  repeated woosh.common.Point path = 1;
+  float width = 2;
+  bool allow_avoid = 11;
+}
+

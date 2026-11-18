@@ -29,7 +29,20 @@ A Woosh robot is operated with Woosh Mobile and configured with Woosh Design. Wo
 
 People who already run robots with the original apps feel at home: every screen keeps the original's panels, and every button sits where it always was.
 
-## What you can do?
+## Implementation status
+
+Open `Doore.xcodeproj` in Xcode 16 or later and select the **Doore** scheme. The app targets iOS and iPadOS 17 and macOS 14. The temporary bundle identifier is `org.example.Doore`. Set the development team and production identifier before device distribution.
+
+| Area | Implemented in the project | Still needs additional evidence |
+|---|---|---|
+| Connection and monitoring | Public WebSocket, ordered sync, connection history, live state, map, station selection and reconnect | Target firmware support on port 5480 |
+| Operation | Task submission using action-group numbers referenced by the active scene’s presets, task control, on-screen/controller/keyboard teleoperation, position initialization, settings and supported WiFi operations | Full action-group JSON, dedicated charge/park/skip button traffic, lateral drive capability and model-specific devices |
+| Site setup | Scene selection, map management, map-building requests, ordinary station registration, task sets and preset copies | Live map pixel format, precise marker deployment and creating an empty scene |
+| Design | Local scene and task-set editing, undo/redo, save and backup, robot task history pages | Scene upload format, dispatch operations and the timestamps for date-range filtering |
+
+The screenshots below show the design targets. To exercise the protocol client without a robot, run the WooshKit tests in the Build section.
+
+## Product scope
 
 **Operate a robot**
 
@@ -132,7 +145,7 @@ flowchart TB
 
 ## Build
 
-You need a Mac with Xcode. Swift Package Manager fetches the one dependency, `swift-protobuf`.
+You need a Mac with Xcode 16 or later. Swift Package Manager fetches the one dependency, `swift-protobuf`.
 
 ```bash
 git clone https://github.com/scorpion1201/doore.git

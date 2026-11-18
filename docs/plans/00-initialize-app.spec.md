@@ -10,7 +10,7 @@ This specification says what 두레 must do and how it must behave toward a Woos
 | What the user sees, and the UI wording | [DESIGN.md](../DESIGN.md) |
 | How to work in this repository | [AGENTS.md](../../AGENTS.md) |
 
-**Status:** nothing is built yet. Work proceeds one milestone at a time ([§ 12](#12-milestones)). What is still unknown is listed in [§ 13](#13-open-questions-and-missing-inputs).
+**Implementation status.** The native project, local client, fake transport and restored schemas are present. Hardware acceptance, channel support and release verification are tracked in [§ 12](#12-milestones) and [§ 13](#13-open-questions-and-missing-inputs).
 
 ## 1. Goal
 
@@ -412,20 +412,18 @@ These need a real robot or the supplier. They are ordered by how much they affec
 | May the status code table and the Woosh name and logo be used? | Decides whether the app can be distributed | Ask the supplier | M5 |
 | Korean translation of the 932 status codes | Site workers must be able to read the recovery steps | Plan the translation work | M5 |
 
-### 13.2 Inputs that are not in this repository yet
+### 13.2 Analysis material
 
-The analysis produced a folder named `woosh-analysis`. It is not checked in here. Ask the owner for it when you need it.
+The supplied analysis archive contains the 25 schemas, both UI string tables and 16 reference screenshots. WooshKit includes the restored schemas and generated Swift. The app carries its string catalog. Keep screenshots and extraction tools outside the app bundle.
 
 | Folder | Contents | Needed for | Goes to |
 |---|---|---|---|
 | `proto` | The 25 Woosh message definitions restored from the executables | M1: generating Swift message types | `Packages/WooshKit/Protos/` |
 | `ui-text` | Every UI string of both apps, Chinese original and English translation, by screen class | M2 onward: the Chinese and English UI strings, which are used unchanged. Also the basis for the Korean strings and for checking that no feature was missed | the `zh-Hans` and `en` values of the string catalog |
 | `screens` | 16 screenshots of the original apps | Screen layout reference | reference only; do not ship |
-| `tools` | The fake robot and the extraction scripts (Python) | Checking the dedicated channel format; recorded traffic for tests | reference for `FakeRobotTransport` |
+| `tools` (absent from the supplied archive) | The fake robot and the extraction scripts (Python) | Checking the dedicated channel format; recorded traffic for tests | reference for `FakeRobotTransport` |
 
-Without `proto`, M1 cannot start: the message types cannot be generated, and guessing field names is not allowed.
-
-Without `ui-text`, the Chinese and English strings cannot be filled in: they must match the original apps exactly, and writing new translations is not allowed. Screens can still be built in Korean first.
+The archive does not include recorded public-API sessions against a physical robot. The fake transport uses synthetic fixtures.
 
 The original executables also embed a status code table: 932 codes with recovery text, as JSON and as a four-sheet spreadsheet (electronic hardware, embedded software, algorithm system, application software). Do not add it to the repository until the owner confirms it may be used. Until then the app shows the raw code and the message the robot sent.
 

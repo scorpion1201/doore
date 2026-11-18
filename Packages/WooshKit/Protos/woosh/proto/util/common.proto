@@ -1,0 +1,60 @@
+// recovered from embedded descriptor at file offset 0x4bc340 (546 bytes)
+syntax = "proto3";
+package woosh.common;
+
+
+message Enum {
+  string key = 1;
+  int32 value = 2;
+}
+
+message Pose2D {
+  float x = 1;
+  float y = 2;
+  float theta = 3;
+}
+
+message Pose {
+  woosh.common.Pose2D pose = 1;
+  uint32 map_id = 2;
+}
+
+message Point {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message Vector3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message Quaternion {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+  float w = 4;
+}
+
+message Twist {
+  float linear = 1;
+  float angular = 2;
+}
+
+message FileMD5 {
+  string name = 1;
+  string md5 = 2;
+}
+
+message FileData {
+  string name = 1;
+  bytes data = 2;
+}
+
+message TimeBucket {
+  int32 start = 1;
+  int32 end = 2;
+}
+

@@ -1,0 +1,335 @@
+// recovered from embedded descriptor at file offset 0x4c6780 (6175 bytes)
+syntax = "proto3";
+package woosh.robot;
+
+import "woosh/proto/util/common.proto";
+import "woosh/proto/util/navigation.proto";
+import "woosh/proto/util/action.proto";
+import "woosh/proto/util/task.proto";
+import "woosh/proto/util/robot.proto";
+import "woosh/proto/robot/robot_count.proto";
+import "woosh/proto/robot/robot_setting.proto";
+
+message RobotInfo {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.General genral = 1;
+  woosh.robot.Setting setting = 2;
+  woosh.robot.State state = 3;
+  woosh.robot.Mode mode = 4;
+  woosh.robot.PoseSpeed pose_speed = 5;
+  woosh.robot.Battery battery = 6;
+  woosh.robot.Network network = 7;
+  woosh.robot.Scene scene = 8;
+  woosh.robot.TaskProc task_proc = 9;
+  woosh.robot.DeviceState device_state = 21;
+  woosh.robot.HardwareState hardware_state = 22;
+  woosh.robot.OperationState operation_state = 23;
+  woosh.robot.Model model = 31;
+  woosh.robot.TaskHistory task_history = 51;
+  woosh.robot.count.StatusCodes status_codes = 52;
+  woosh.robot.count.AbnormalCodes abnormal_codes = 53;
+  woosh.robot.count.Operation count_operation = 71;
+  woosh.robot.count.Task count_task = 72;
+  woosh.robot.count.Status count_error = 73;
+}
+
+message General {
+  message ModelData {
+    uint32 length = 1;
+    uint32 width = 2;
+    uint32 height = 3;
+    uint32 weight = 4;
+    uint32 load = 5;
+  }
+  message Version {
+    string system = 1;
+    string rc = 2;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.Type type = 1;
+  woosh.robot.General.ModelData model_data = 11;
+  string urdf_name = 21;
+  string display_model = 22;
+  uint32 serial_number = 23;
+  string service_id = 24;
+  uint32 driver_method = 25;
+  woosh.robot.General.Version version = 31;
+}
+
+message RobotState {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.State state = 1;
+}
+
+message Mode {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.ControlMode ctrl = 1;
+  woosh.robot.WorkMode work = 2;
+}
+
+message Model {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  repeated woosh.common.Point model = 1;
+  woosh.robot.FootPrint type = 2;
+}
+
+message Setting {
+  message Allow {
+    bool auto_charge = 1;
+    bool auto_park = 2;
+    bool goods_check = 3;
+    bool mechanism_check = 4;
+    bool auto_hold = 5;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.setting.Identity identity = 1;
+  woosh.robot.setting.Server server = 2;
+  woosh.robot.setting.Power power = 3;
+  woosh.robot.setting.Sound sound = 4;
+  woosh.robot.Setting.Allow allow = 21;
+}
+
+message Battery {
+  enum ChargeState {
+    kChargeStateUndefined = 0;
+    kNot = 1;
+    kManual = 2;
+    kAuto = 3;
+  }
+  message Detail {
+    woosh.robot.Battery.ChargeState charge_state = 1;
+    uint32 power = 2;
+    uint32 health = 11;
+    uint32 charge_cycle = 12;
+    uint32 battery_cycle = 13;
+    uint32 temp_max = 14;
+    float voltage = 15;
+    float current = 16;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.Battery.ChargeState charge_state = 1;
+  uint32 power = 2;
+  repeated woosh.robot.Battery.Detail details = 21;
+}
+
+message Network {
+  message WiFi {
+    enum Mode {
+      kWiFiModeUndefined = 0;
+      kAP = 1;
+      kToAP = 2;
+      kClient = 3;
+      kToClient = 4;
+    }
+    string name = 1;
+    uint64 code = 5;
+    bytes list_json = 6;
+    uint32 strength = 7;
+    woosh.robot.Network.WiFi.Mode mode = 11;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  bool is_connected = 1;
+  string robot_ip = 2;
+  string sch_ip = 3;
+  woosh.robot.Network.WiFi wifi = 11;
+}
+
+message Scene {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  string scene_name = 1;
+  uint32 map_id = 2;
+  string map_name = 3;
+  int64 version = 4;
+}
+
+message TaskProc {
+  message Action {
+    woosh.action.Type type = 4;
+    woosh.action.State state = 5;
+    int32 wait_id = 6;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  int64 robot_task_id = 1;
+  woosh.task.Type type = 2;
+  woosh.task.State state = 3;
+  woosh.robot.TaskProc.Action action = 11;
+  string dest = 21;
+  string msg = 22;
+  int32 time = 31;
+}
+
+message TaskHistory {
+  repeated woosh.robot.TaskProc tes = 1;
+}
+
+message PoseSpeed {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.common.Twist twist = 1;
+  woosh.common.Pose2D pose = 2;
+  uint32 map_id = 3;
+  uint32 mileage = 11;
+}
+
+message DeviceState {
+  enum HardwareBit {
+    kHardwareBitUndefined = 0;
+    kBtn1 = 1;
+    kBtn2 = 2;
+    kBtn3 = 4;
+    kBtn4 = 8;
+    kBtn5 = 16;
+    kBtn6 = 32;
+    kBtn7 = 64;
+    kBtn8 = 128;
+    kServoBtn = 256;
+    kLiftBtn = 512;
+    kEmgBtn = 1024;
+    kPowerBtn = 2048;
+  }
+  enum SoftwareBit {
+    kSoftwareBitUndefined = 0;
+    kLocation = 1;
+    kSchedule = 2;
+    kGoodsState = 4;
+    kOccupancy = 8;
+    kMuteCall = 16;
+    kProgramMute = 32;
+    kHoldMode = 64;
+    kCableMotion = 128;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  uint32 hardware = 1;
+  uint32 software = 2;
+}
+
+message OperationState {
+  enum NavBit {
+    kNavBitUndefined = 0;
+    kNarrow = 1;
+    kGuide = 2;
+    kInaLift = 4;
+    kImpede = 8;
+    kQRCode = 16;
+    kStage = 32;
+  }
+  enum RobotBit {
+    kRobotBitUndefined = 0;
+    kTaskable = 1;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  uint32 nav = 1;
+  uint32 robot = 11;
+}
+
+message HardwareState {
+  enum State {
+    kNormal = 0;
+    kInfo = 1;
+    kWarn = 16;
+    kFatal = 17;
+  }
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.HardwareState.State board = 1;
+  woosh.robot.HardwareState.State esb = 2;
+  woosh.robot.HardwareState.State crash = 3;
+  woosh.robot.HardwareState.State seanner = 4;
+  woosh.robot.HardwareState.State plc = 5;
+  repeated woosh.robot.HardwareState.State motor = 6;
+  woosh.robot.HardwareState.State power = 7;
+  repeated woosh.robot.HardwareState.State lidar = 8;
+  repeated woosh.robot.HardwareState.State camera = 9;
+  woosh.robot.HardwareState.State light = 10;
+  repeated woosh.robot.HardwareState.State sonar = 11;
+  woosh.robot.HardwareState.State magnetism = 12;
+  woosh.robot.HardwareState.State beacon = 13;
+  woosh.robot.HardwareState.State imu = 14;
+  repeated woosh.robot.HardwareState.State lift = 15;
+  repeated woosh.robot.HardwareState.State roller = 16;
+  woosh.robot.HardwareState.State tractor = 17;
+}
+
+message BeaconData {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  uint32 beacon_id = 1;
+  float range = 2;
+  float power_rate = 3;
+}
+
+message ScannerData {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  float angle_min = 1;
+  float angle_max = 2;
+  float angle_increment = 3;
+  float time_increment = 4;
+  float scan_time = 5;
+  float range_min = 6;
+  float range_max = 7;
+  repeated float ranges = 8;
+  woosh.common.Pose2D pose = 11;
+  woosh.common.Vector3 offset = 12;
+}
+
+message CameraData {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  repeated woosh.common.Point points = 1;
+  woosh.common.Pose2D pose = 11;
+  woosh.common.Vector3 offset = 12;
+}
+
+message SonarData {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  repeated woosh.common.Point points = 1;
+  woosh.common.Pose2D pose = 11;
+  woosh.common.Vector3 offset = 12;
+}
+
+message NavPath {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.nav.Path path = 1;
+}
+
+message PlanPath {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  repeated woosh.nav.PlanPath plan_path = 1;
+}
+

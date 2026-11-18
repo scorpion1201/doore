@@ -1,0 +1,39 @@
+// recovered from embedded descriptor at file offset 0x4cfd00 (520 bytes)
+syntax = "proto3";
+package woosh.action;
+
+
+enum Type {
+  kTypeUndefined = 0;
+  kNav = 1;
+  kStepCtrl = 2;
+  kSecondposEnter = 3;
+  kSecondposQuit = 4;
+  kCarry = 5;
+  kWait = 6;
+  kCharge = 7;
+}
+
+enum State {
+  kStateUndefined = 0;
+  kRosExecuting = 1;
+  kRosWarning = 2;
+  kRosCancel = 3;
+  kRosSuccess = 4;
+  kRosFailure = 5;
+  kSuspend = 10;
+  kTraffiCtrl = 11;
+}
+
+enum Order {
+  kOrderUndefined = 0;
+  kStart = 1;
+  kPause = 2;
+  kContinue = 3;
+  kCancel = 4;
+  kRecover = 5;
+  kWaitBreak = 6;
+  kTmCtrl = 7;
+  kReleaseCtrl = 8;
+}
+

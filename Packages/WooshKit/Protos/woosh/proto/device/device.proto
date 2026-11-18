@@ -1,0 +1,10 @@
+// recovered from embedded descriptor at file offset 0x4cd7c0 (152 bytes)
+syntax = "proto3";
+package woosh.device;
+
+
+message RfRemoteController {
+  uint32 address = 1;
+  uint32 keys = 2;
+}
+

@@ -1,0 +1,28 @@
+{
+  "sourceLanguage": "ko",
+  "strings": {
+    "NSLocalNetworkUsageDescription": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "같은 네트워크에 있는 로봇에 연결하여 상태와 지도를 확인합니다."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect to robots on your local network to view their status and maps."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接到同一局域网中的机器人以查看其状态和地图。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

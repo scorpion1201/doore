@@ -1,0 +1,44 @@
+// recovered from embedded descriptor at file offset 0x4cd140 (942 bytes)
+syntax = "proto3";
+package woosh.ros;
+
+import "woosh/proto/ros/action.proto";
+
+enum State {
+  kRosNone = 0;
+  kRosCancel = -2;
+  kRosFailure = -1;
+  kRosSuccess = 1;
+  kRosExecuting = 2;
+  kRosPause = 3;
+  kRosPauseFailed = 4;
+  kRosExecuteFailed = 5;
+  kRosErrMsg = 10;
+  kRosWiFiCode = 100;
+  kRosWiFiJson = 101;
+}
+
+message CallAction {
+  oneof action {
+    woosh.ros.action.ChargeControl charge_control = 1;
+    woosh.ros.action.LiftControl lift_control = 2;
+    woosh.ros.action.LiftControl2 lift_control2 = 3;
+    woosh.ros.action.StepControl step_control = 4;
+    woosh.ros.action.LiftControl3 lift_control3 = 5;
+    woosh.ros.action.MoveBase move_base = 51;
+    woosh.ros.action.NavigationMode nav_mode = 52;
+    woosh.ros.action.AnyAction any_action = 201;
+  }
+}
+
+message Feedback {
+  string action = 1;
+  woosh.ros.State state = 11;
+  uint64 code = 12;
+  string msg = 13;
+}
+
+message Feedbacks {
+  repeated woosh.ros.Feedback fbs = 1;
+}
+
