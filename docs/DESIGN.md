@@ -11,7 +11,7 @@ For every screen, the number of panels, their positions and the order of their b
 
 This document describes what the user sees. How the app must behave toward the robot is in the [specification](plans/00-initialize-app.spec.md), and how the code is organized is in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-**Reading the wording.** Every screen is shown here in Korean, the default language. The layout is identical in Chinese and English.
+**Reading the wording.** Every screen is shown here in Korean, the default language. The layout is identical in Chinese and English. The app name and window title are **Woosh Mobile** in all three languages. This document uses the internal codename 두레 for the Apple project.
 
 **Reading the sizes.** Every size is in points. iPad and Mac sizes are given for a 1280 × 800 reference screen, the size of the original Woosh Mobile window. iPhone sizes are given for a 390 × 844 reference screen. Names, addresses and numbers such as `예시-01` and `192.0.2.10` are sample values.
 
@@ -576,7 +576,7 @@ The original apps ship in Chinese and English. 두레 keeps both and adds Korean
 - **A string that exists only in 두레 has no original.** This covers the deviations listed for each screen and the messages of [§ 10](#10-empty-and-blocked-states). Write its Chinese and its English with the words the originals already use for the same things.
 - **Text the robot sends** — a reply's message, a name, a station number — is shown as received, in every language.
 
-The original string table is the `ui-text` folder of the analysis material. It lists every string of both apps in Chinese and English, by screen. It is not in this repository yet ([spec § 13.2](plans/00-initialize-app.spec.md#132-inputs-that-are-not-in-this-repository-yet)). Until it is, do not invent Chinese or English strings: ask for it.
+The supplied `ui-text` folder contains the original Chinese and English tables by screen. The application catalog uses the corresponding entries. Copy for labels absent from those tables requires separate source confirmation.
 
 ### 12.2 Glossary
 

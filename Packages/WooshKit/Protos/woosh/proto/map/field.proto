@@ -1,0 +1,139 @@
+// recovered from embedded descriptor at file offset 0x4bfe60 (3043 bytes)
+syntax = "proto3";
+package woosh.map.field;
+
+import "woosh/proto/util/common.proto";
+import "woosh/proto/util/navigation.proto";
+
+enum GuideType {
+  kWait = 0;
+  kTurn = 1;
+  kWormhole = 2;
+  kSegment = 3;
+  kMutex = 4;
+}
+
+message FieldInfo {
+  repeated woosh.map.field.GuideMarker guide_markers = 20;
+  repeated woosh.map.field.BidirectionWay bidirection_ways = 1;
+  repeated woosh.map.field.SingleWay single_ways = 2;
+  repeated woosh.map.field.OneWay one_ways = 3;
+  repeated woosh.map.field.Crossing crossings = 4;
+  repeated woosh.map.field.NarrowPassage narrow_passages = 5;
+  repeated woosh.map.field.LocateField locate_fields = 6;
+  repeated woosh.map.field.RampField ramp_fields = 7;
+  repeated woosh.map.field.OdomField odom_fields = 8;
+  repeated woosh.map.field.AutoDoorField autodoor_fields = 9;
+  repeated woosh.map.field.SpeedLimitField speed_limit_fields = 10;
+  repeated woosh.map.field.FireField fire_fields = 11;
+  repeated woosh.map.field.WarnField warn_fields = 12;
+  repeated woosh.map.field.GuideField guide_fields = 13;
+}
+
+message GuideMarker {
+  uint32 id = 1;
+  woosh.common.Pose2D pos = 2;
+  woosh.map.field.GuideType type = 3;
+  string no = 4;
+  string description = 5;
+}
+
+message GuidePoint {
+  uint32 id = 1;
+  woosh.common.Point point = 2;
+}
+
+message GuidePose {
+  uint32 id = 1;
+  woosh.common.Pose2D pose = 2;
+}
+
+message NavField {
+  uint32 id = 1;
+  woosh.nav.Mode nav_mode = 2;
+  float wait_time_out = 3;
+  float max_speed = 4;
+  uint32 capacity = 10;
+  repeated woosh.common.Point vertexs = 11;
+  repeated uint32 guide_markers = 20;
+}
+
+message BidirectionWay {
+  woosh.map.field.NavField nav_filed = 1;
+  repeated woosh.map.field.GuidePoint guide_points = 2;
+}
+
+message SingleWay {
+  woosh.map.field.NavField nav_filed = 1;
+  repeated woosh.map.field.GuidePoint guide_points = 2;
+}
+
+message OneWay {
+  enum Direction {
+    kUp = 0;
+    kDown = 1;
+    kLeft = 2;
+    kRight = 3;
+  }
+  woosh.map.field.NavField nav_filed = 1;
+  woosh.map.field.OneWay.Direction direction = 2;
+  repeated woosh.map.field.GuidePoint guide_points = 3;
+}
+
+message Crossing {
+  woosh.map.field.NavField nav_filed = 1;
+  repeated woosh.map.field.GuidePoint guide_points = 2;
+}
+
+message NarrowPassage {
+  woosh.map.field.NavField nav_filed = 1;
+  woosh.map.field.GuidePose in = 2;
+  woosh.map.field.GuidePose out = 3;
+  repeated woosh.map.field.GuidePoint guide_points = 4;
+  float radius = 5;
+  float offset = 6;
+}
+
+message LocateField {
+  woosh.map.field.NavField nav_filed = 1;
+}
+
+message RampField {
+  woosh.map.field.NavField nav_filed = 1;
+  float slope_angle = 2;
+  woosh.common.Pose2D arrow_pose = 3;
+}
+
+message OdomField {
+  woosh.map.field.NavField nav_filed = 1;
+}
+
+message AutoDoorField {
+  woosh.map.field.NavField nav_filed = 1;
+  woosh.map.field.GuidePose in = 2;
+  woosh.map.field.GuidePose out = 3;
+  repeated woosh.map.field.GuidePoint guide_points = 4;
+  float radius = 5;
+  float offset = 6;
+  bytes custom = 10;
+}
+
+message SpeedLimitField {
+  woosh.map.field.NavField nav_filed = 1;
+}
+
+message FireField {
+  woosh.map.field.NavField nav_filed = 1;
+}
+
+message WarnField {
+  woosh.map.field.NavField nav_filed = 1;
+  bytes custom = 10;
+}
+
+message GuideField {
+  woosh.map.field.NavField nav_filed = 1;
+  repeated woosh.map.field.GuidePoint guide_points = 2;
+  woosh.map.field.GuideType type = 3;
+}
+

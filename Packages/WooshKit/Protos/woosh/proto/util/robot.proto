@@ -1,0 +1,51 @@
+// recovered from embedded descriptor at file offset 0x4cff40 (670 bytes)
+syntax = "proto3";
+package woosh.robot;
+
+
+enum Type {
+  kTypeUndefined = 0;
+  kBaseRobot_200 = 1;
+  kPalletLiftRobot_500 = 11;
+  kShelfLiftRobot_500 = 21;
+  kTractorRobot_500 = 31;
+  kRollerRobot_500 = 41;
+  kComplexRobot = 50;
+  kArmRobot_14 = 61;
+}
+
+enum State {
+  kStateUndefined = 0;
+  kUninit = 1;
+  kIdle = 2;
+  kParking = 3;
+  kTask = 4;
+  kWarning = 5;
+  kFault = 6;
+  kFollowing = 7;
+  kCharging = 8;
+  kMapping = 9;
+}
+
+enum ControlMode {
+  kControlModeUndefined = 0;
+  kAuto = 1;
+  kManual = 2;
+  kMaintain = 3;
+}
+
+enum WorkMode {
+  kWorkModeUndefined = 0;
+  kDeployMode = 1;
+  kTaskMode = 2;
+  kScheduleMode = 3;
+}
+
+enum FootPrint {
+  kOriginal = 0;
+  kExpand = 1;
+  kSpare = 2;
+  kDock = 3;
+  kReset = 101;
+}
+

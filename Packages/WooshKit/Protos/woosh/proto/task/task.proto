@@ -1,0 +1,88 @@
+// recovered from embedded descriptor at file offset 0x4c4240 (1358 bytes)
+syntax = "proto3";
+package woosh.task;
+
+import "woosh/proto/util/task.proto";
+import "woosh/proto/util/robot.proto";
+
+enum Order {
+  kOrderUndefined = 0;
+  kPause = 1;
+  kContinue = 2;
+  kCancel = 3;
+  kNext = 4;
+  kRedo = 5;
+  kComplete = 6;
+  kReset = 7;
+  kDelete = 8;
+}
+
+enum TaskSetState {
+  kTaskSetStateUndefined = 0;
+  kSetUnassigned = 1;
+  kSetExecuting = 2;
+  kSetCompleted = 3;
+  kSetFailed = 4;
+  kSetDeleted = 5;
+}
+
+message TaskBase {
+  int32 id = 1;
+  string name = 2;
+  string mark_no = 11;
+  woosh.task.Type type = 12;
+  woosh.task.Direction direction = 13;
+  int32 type_no = 14;
+  int32 wait_time = 15;
+  bool cannot_cancel = 21;
+  bytes custom = 31;
+}
+
+message TaskExec {
+  woosh.task.State state = 1;
+  int32 action_wait_id = 2;
+}
+
+message Task {
+  woosh.task.TaskBase base = 1;
+  woosh.task.TaskExec exec = 2;
+}
+
+message TaskSetBase {
+  int32 id = 1;
+  string name = 2;
+  string type = 3;
+  string route = 4;
+  string no = 5;
+  string adapter = 11;
+  string actuator = 12;
+  woosh.robot.Type rtype = 21;
+  int32 priority = 51;
+  repeated uint32 robots = 52;
+}
+
+message TaskSetExec {
+  uint32 robot = 1;
+  woosh.task.TaskSetState state = 11;
+  int32 cur_task_id = 21;
+  int32 pre_task_id = 22;
+}
+
+message TaskSetTime {
+  int32 generate = 1;
+  int32 start = 2;
+  int32 end = 3;
+}
+
+message TaskSet {
+  woosh.task.TaskSetBase base = 1;
+  woosh.task.TaskSetExec exec = 2;
+  woosh.task.TaskSetTime time = 3;
+  repeated woosh.task.Task tasks = 10;
+}
+
+message TaskSetList {
+  repeated woosh.task.TaskSet tsets = 1;
+  int64 qty = 11;
+}
+

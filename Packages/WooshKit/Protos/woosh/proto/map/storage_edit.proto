@@ -1,0 +1,27 @@
+// recovered from embedded descriptor at file offset 0x4c2c40 (367 bytes)
+syntax = "proto3";
+package woosh.map.mark.storage;
+
+import "woosh/proto/map/mark.proto";
+
+message Create {
+  woosh.map.mark.Storage storage = 1;
+  bool precision = 2;
+}
+
+message Delete {
+  string no = 1;
+}
+
+message Update {
+  woosh.map.mark.Storage storage = 1;
+}
+
+message Find {
+  string no = 1;
+}
+
+message Storages {
+  repeated woosh.map.mark.Storage storages = 1;
+}
+

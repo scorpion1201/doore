@@ -1,0 +1,90 @@
+// recovered from embedded descriptor at file offset 0x4ce900 (1326 bytes)
+syntax = "proto3";
+package woosh.dispatch.system;
+
+import "woosh/proto/util/common.proto";
+
+message Scene {
+  message Map {
+    uint32 id = 1;
+    string name = 2;
+    float resolution = 10;
+    woosh.common.Pose2D origin = 11;
+    woosh.common.Pose2D end = 12;
+  }
+  string scene = 1;
+  int64 version = 2;
+  repeated woosh.dispatch.system.Scene.Map maps = 3;
+}
+
+message ChargeSettings {
+  enum Order {
+    kGet = 0;
+    kPut = 1;
+    kDel = 2;
+  }
+  message Setting {
+    uint32 level = 1;
+    uint32 guard_power = 2;
+    uint32 low_power = 3;
+    uint32 work_power = 4;
+    uint32 full_power = 5;
+    int32 time = 11;
+  }
+  repeated woosh.dispatch.system.ChargeSettings.Setting settings = 1;
+  woosh.dispatch.system.ChargeSettings.Order order = 11;
+}
+
+message SwitchScene {
+  string name = 1;
+}
+
+message SceneSettings {
+  string name = 1;
+}
+
+message PacAccount {
+  enum Type {
+    kPark = 0;
+    kCharger = 1;
+  }
+  enum State {
+    kIdle = 0;
+    kTransiting = 1;
+    kOccupy = 2;
+  }
+  uint32 id = 1;
+  string no = 2;
+  woosh.dispatch.system.PacAccount.Type type = 5;
+  woosh.dispatch.system.PacAccount.State state = 6;
+  uint32 robot = 11;
+  int32 tset_id = 12;
+}
+
+message PacAccountList {
+  repeated woosh.dispatch.system.PacAccount accounts = 1;
+}
+
+message GotoCharge {
+  uint32 robot = 1;
+  string no = 2;
+}
+
+message GetPos {
+  string no = 1;
+  woosh.common.Pose pose = 11;
+}
+
+message PrintLevel {
+  enum Level {
+    kTrace = 0;
+    kDebug = 1;
+    kInfo = 2;
+    kWarn = 3;
+    kErr = 4;
+    kCritical = 5;
+    kOff = 6;
+  }
+  woosh.dispatch.system.PrintLevel.Level level = 1;
+}
+

@@ -1,0 +1,176 @@
+// recovered from embedded descriptor at file offset 0x4be380 (3589 bytes)
+syntax = "proto3";
+package woosh.map.mark;
+
+import "woosh/proto/util/common.proto";
+import "woosh/proto/util/navigation.proto";
+
+message MarkInfo {
+  int64 version = 1;
+  string sdkv = 2;
+  string floor_name = 3;
+  repeated woosh.map.mark.Storage storages = 11;
+  repeated woosh.map.mark.Wormhole wormholes = 51;
+  repeated woosh.map.mark.Beacon beacons = 101;
+  repeated woosh.map.mark.ARTag artags = 102;
+  repeated woosh.map.mark.Reflector reflectors = 103;
+}
+
+message Identity {
+  uint32 id = 1;
+  string no = 2;
+  string desc = 3;
+}
+
+message Pose {
+  message Adjust {
+    woosh.common.Pose2D pose = 1;
+  }
+  woosh.common.Pose2D dock = 1;
+  woosh.common.Pose2D real = 2;
+  oneof category {
+    woosh.map.mark.Pose.Adjust adjust = 101;
+  }
+}
+
+message Navigation {
+  woosh.nav.ArrType arr = 1;
+}
+
+message Dock {
+  enum FeatureBoardType {
+    kFeatureBoardTypeUndefined = 0;
+    kVLShape = 1;
+    kParallelShape = 2;
+    kConvexShape = 3;
+    kNarrowPassageShape = 4;
+    kElevatorShape = 5;
+    kFourPointRect = 6;
+    kMagnetism = 15;
+    kMagnetismRfid = 16;
+  }
+  message Identify {
+    uint32 artag = 1;
+    uint64 rfid = 11;
+  }
+  message Verify {
+    bool top_photoelec = 1;
+    bool bottom_magnetic = 2;
+    bool back_feature = 3;
+    bool bottom_artag = 4;
+  }
+  woosh.map.mark.Dock.Identify identify = 1;
+  woosh.map.mark.Dock.Verify verify = 2;
+  woosh.map.mark.Dock.FeatureBoardType board_type = 11;
+  string tag = 12;
+}
+
+message Storage {
+  message Rack {
+    repeated string numbers = 1;
+  }
+  message Parkspot {
+    repeated uint32 robots = 10;
+  }
+  message Charger {
+    bool parking = 1;
+    repeated uint32 robots = 10;
+  }
+  message PalletPlatform {
+    string detector = 1;
+  }
+  message LiftTrolley {
+  }
+  message TractorTrailer {
+  }
+  message RollerStation {
+    enum RollerMode {
+      kRollerModeUndefined = 0;
+      kCheck = 1;
+      kProcessctrl = 2;
+    }
+    woosh.map.mark.Storage.RollerStation.RollerMode mode = 1;
+  }
+  message ArmWorktop {
+  }
+  woosh.map.mark.Identity identity = 1;
+  woosh.map.mark.Pose pose = 2;
+  woosh.map.mark.Navigation nav = 3;
+  woosh.map.mark.Dock dock = 4;
+  bytes custom = 11;
+  oneof category {
+    woosh.map.mark.Storage.Rack rack = 101;
+    woosh.map.mark.Storage.Parkspot parkspot = 102;
+    woosh.map.mark.Storage.Charger charger = 103;
+    woosh.map.mark.Storage.PalletPlatform pallet_platform = 107;
+    woosh.map.mark.Storage.LiftTrolley lift_trolley = 104;
+    woosh.map.mark.Storage.TractorTrailer tractor_trailer = 106;
+    woosh.map.mark.Storage.RollerStation roller_station = 108;
+    woosh.map.mark.Storage.ArmWorktop arm_worktop = 109;
+  }
+}
+
+message Wormhole {
+  message Elevator {
+    enum Type {
+      kTypeUndefined = 0;
+      kWide = 1;
+      kNarrow = 2;
+    }
+    woosh.map.mark.Wormhole.Elevator.Type type = 1;
+    string ip = 11;
+    uint32 port = 12;
+    string tag = 13;
+    string desc = 14;
+  }
+  woosh.map.mark.Identity identity = 1;
+  woosh.map.mark.Pose pose = 2;
+  woosh.map.mark.Navigation nav = 3;
+  string token = 101;
+  repeated uint32 reach_maps = 102;
+  uint32 wormhole_field = 110;
+  uint32 ferry_field = 111;
+  repeated uint32 other_fields = 112;
+  oneof entity {
+    woosh.map.mark.Wormhole.Elevator elevator = 51;
+  }
+}
+
+message Beacon {
+  message Group {
+    fixed32 group_id = 1;
+    float max_range = 2;
+  }
+  uint32 id = 1;
+  repeated woosh.map.mark.Beacon.Group group = 2;
+  woosh.common.Point point = 3;
+}
+
+message ARTag {
+  uint32 id = 1;
+  woosh.common.Pose2D pose = 2;
+}
+
+message Reflector {
+  uint32 id = 1;
+  woosh.common.Pose2D pose = 2;
+  repeated fixed32 group = 3;
+}
+
+message Storages {
+  message Base {
+    woosh.map.mark.Identity identity = 1;
+    woosh.map.mark.Pose pose = 2;
+    bytes custom = 11;
+  }
+  repeated woosh.map.mark.Storages.Base bases = 11;
+  repeated woosh.map.mark.Storages.Base racks = 12;
+  repeated woosh.map.mark.Storages.Base parkspots = 13;
+  repeated woosh.map.mark.Storages.Base chargers = 14;
+  repeated woosh.map.mark.Storages.Base pallet_platforms = 15;
+  repeated woosh.map.mark.Storages.Base lift_trolleys = 16;
+  repeated woosh.map.mark.Storages.Base tractor_trailers = 17;
+  repeated woosh.map.mark.Storages.Base roller_stations = 18;
+  repeated woosh.map.mark.Storages.Base arm_worktops = 19;
+}
+

@@ -1,0 +1,32 @@
+// recovered from embedded descriptor at file offset 0x4d0220 (392 bytes)
+syntax = "proto3";
+package woosh.task;
+
+
+enum Direction {
+  kDirectionUndefined = 0;
+  kFeeding = 1;
+  kCutting = 2;
+}
+
+enum Type {
+  kTypeUndefined = 0;
+  kPick = 1;
+  kParking = 2;
+  kCharge = 3;
+  kCarry = 4;
+}
+
+enum State {
+  kStateUndefined = 0;
+  kInit = 1;
+  kReady = 2;
+  kExecuting = 3;
+  kPaused = 4;
+  kActionWait = 5;
+  kTaskWait = 6;
+  kCompleted = 7;
+  kCanceled = 8;
+  kFailed = 9;
+}
+

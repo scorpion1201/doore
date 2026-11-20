@@ -4,9 +4,9 @@ Instructions for coding agents that work in this repository. [README.md](README.
 
 ## Project overview
 
-두레 is one SwiftUI app for iPhone, iPad and Mac that does the work of Woosh Mobile and Woosh Design, the vendor's Windows and Android apps for operating and configuring Woosh robots. It is a new app, not a port of their code. It talks to the same robots over the robot's documented WebSocket API. In code and file names the app is spelled `Doore`.
+Woosh Mobile is the app name and window title in every supported language. 두레 (`Doore`) is the internal project codename. This SwiftUI app brings the original Woosh Mobile and Woosh Design workflows to iPhone, iPad and Mac using the robot's documented WebSocket API.
 
-**The repository holds documentation only.** No Xcode project, Swift package or source file exists yet. The first implementation task creates them.
+The repository includes a native Xcode project, the local WooshKit package, generated protocol types and tests.
 
 Before you change something, read the document that covers it:
 
@@ -18,7 +18,7 @@ Do not look for context outside these. If they disagree, DESIGN.md wins for what
 
 ## Build and test commands
 
-These commands are the contract. They do not work yet: the scaffolding task makes them work, and every later change leaves them passing. If you rename a scheme or move a package, update this section in the same change.
+Use Swift 5.9 or later for the package and Xcode 16 or later for the application. If you rename a scheme or move a package, update this section in the same change.
 
 ```bash
 swift test --package-path Packages/WooshKit

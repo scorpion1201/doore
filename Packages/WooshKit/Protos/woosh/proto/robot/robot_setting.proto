@@ -1,0 +1,66 @@
+// recovered from embedded descriptor at file offset 0x4c9780 (647 bytes)
+syntax = "proto3";
+package woosh.robot.setting;
+
+
+message Identity {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  string name = 1;
+}
+
+message Server {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  string ip = 1;
+  uint32 port = 2;
+}
+
+message AutoCharge {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  bool allow = 1;
+}
+
+message AutoPark {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  bool allow = 1;
+}
+
+message GoodsCheck {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  bool allow = 1;
+}
+
+message AutoHold {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  bool allow = 1;
+}
+
+message Power {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  uint32 alarm = 1;
+  uint32 low = 2;
+  uint32 idle = 3;
+  uint32 full = 4;
+}
+
+message Sound {
+  oneof request {
+    uint32 robot_id = 199;
+  }
+  bool mute = 1;
+  uint32 volume = 2;
+}
+

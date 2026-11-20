@@ -1,16 +1,17 @@
 # Spec 00: Initialize the app
 
-**Task:** initialize 두레. Starting from an empty repository, build the universal app that brings Woosh Mobile and Woosh Design to iPhone, iPad and Mac.
+**Task:** build Woosh Mobile for iPhone, iPad and Mac under the internal codename 두레 (`Doore`). The universal app combines the workflows of the original Woosh Mobile and Woosh Design.
 
 This specification says what 두레 must do and how it must behave toward a Woosh robot. It covers the whole product, from the first connection to the Design workspace. Scope is decided here: the goal, the non-goals and the milestones.
 
 | To learn | Read |
 |---|---|
 | How the code is organized | [ARCHITECTURE.md](../ARCHITECTURE.md) |
+| Current milestone status and last verified results | [PROGRESS.md](../PROGRESS.md) |
 | What the user sees, and the UI wording | [DESIGN.md](../DESIGN.md) |
 | How to work in this repository | [AGENTS.md](../../AGENTS.md) |
 
-**Status:** nothing is built yet. Work proceeds one milestone at a time ([§ 12](#12-milestones)). What is still unknown is listed in [§ 13](#13-open-questions-and-missing-inputs).
+**Implementation status.** The native project, local client, fake transport and restored schemas are present. Hardware acceptance, channel support and release verification are tracked in [§ 12](#12-milestones) and [§ 13](#13-open-questions-and-missing-inputs).
 
 ## 1. Goal
 
@@ -266,8 +267,8 @@ The robot has a control mode and a work mode, and each action needs a particular
 |---|---|---|---|---|---|
 | Connect | Robot name button → enter IP → connect | Open the socket, subscribe, then the sync of [§ 5.2](#52-connection-states-and-initial-sync) | Status bar fills in; map and stations appear | Observed | M2 |
 | Single task | Monitor: pick a station → 작업 → choose type, direction, action group → send | `ExecTask` | State becomes "in task"; destination and progress appear over the map | Inferred (dialog and status display Observed) | M2 |
-| Task control | Pause, continue, cancel, skip → confirm | `ActionOrder` (pause and so on) | Progress reads "paused"; the button becomes "continue" | Observed | M2 |
-| Charge, park | 충전 or 주차 → confirm | A charge task or a park task | State becomes charging, and so on | Inferred (confirm dialog Observed) | M2 |
+| Task control | Pause, continue, cancel, or release a wait → confirm | `ActionOrder` with the corresponding order, including `kWaitBreak` for 건너뛰기 | Progress and available controls follow the next robot report | Observed flow, restored order enum and original UI wording | M2 |
+| Charge, park | 충전 or 주차 → review destination → confirm | `ExecTask` with type `kCharge` or `kParking` | Task and robot state follow notifications | Documented public request, original shortcut equivalence awaits hardware comparison | M2 |
 | Teleoperation | Hold a joystick | `Twist` repeatedly, then zero twice on release | Robot marker moves on the map | Observed | M2 |
 | Position init | Init tab → 제자리 초기화 → confirm | `InitRobot` using the recorded pose | Scene data is fetched again and the map redraws | Observed | M2 |
 | Set pose | Init tab: long-press and drag the robot marker, set heading with the dial, release | `SetRobotPose` | Robot marker moves to the chosen pose | Inferred | M2 |
@@ -278,6 +279,10 @@ The robot has a control mode and a work mode, and each action needs a particular
 | Task set | Task: pick a station → add a task, repeat → reorder → 작업 묶음 보내기 | `task.AddTask` or a repeat task | The set appears in Monitor's list and runs with the start button | Inferred | M3 |
 | WiFi | List, add, reconnect, delete, switch to hotspot | The five commands of `RobotWiFi` | A notice while switching | Inferred | M3 |
 | Device control | Run speech, step move, lift, … | `Speak`, `CallAction` | A success or failure notice | Inferred | M3 |
+
+The charging endpoint accepts an optional `markNo`. The Monitor sends the selected eligible charger when provided. Otherwise it omits the destination and lets the robot choose. For parking, the app sends the selected eligible parking station or the only eligible one on the current map. When several are available, select one in the existing station strip. Both confirmations are scoped to the connection, scene and map. [Charging task](https://wooshrobot.apifox.cn/api-391389183.md) · [Station task](https://wooshrobot.apifox.cn/api-69847550.md)
+
+The original Monitor strings identify 건너뛰기 as wait release. Confirming it sends `woosh.robot.ActionOrder` with `woosh.action.kWaitBreak` for the reported wait. The original charging dialog also has a manual action (手充 / Manual). Its robot request remains unverified.
 
 ### 7.3 Woosh Design scene workflow (M4)
 
@@ -405,27 +410,25 @@ These need a real robot or the supplier. They are ordered by how much they affec
 | Does the public API support every message the app needs? | Decides whether the dedicated transport must be built | Try each request of § 7.2 and each topic of § 6.3, especially map-building data, scene upload and WiFi settings | M2, M3 |
 | What is the format of the live map data during map building? | It is the main display of the map-building screen | Start map building on a real robot and record the notifications | M3 |
 | What is the structure of the action groups JSON? | It fills the "action group" list of the task request dialog. With an empty list no task can be sent | Read the string in a real robot's scene data | M2 |
-| Which exact requests do charge, park and the Device screen send? | The basis for implementing them | The original app's log file records the names of the requests it sends | M2, M3 |
+| What does the original app send for manual charging and model-specific Device actions? Do the charge and park shortcuts match the public task API on target firmware? | Completes manual charging and device support and confirms compatibility of the implemented shortcuts | Compare original app requests and resulting notifications on the target robot | M2, M3 |
 | How does a dispatch server connection work? | The basis for multi-robot features | Connect Woosh Design in dispatch mode where a dispatch server exists | M4 |
 | What is the internal format of Woosh Design's local scene files? | Only matters if file-level compatibility is wanted | Download a scene on a real robot and inspect `map/robot` | not planned |
 | Which devices (arms, lift column) does each robot model have? | Decides which groups the Device screen shows | Compare with the robot models in use | M3 |
 | May the status code table and the Woosh name and logo be used? | Decides whether the app can be distributed | Ask the supplier | M5 |
 | Korean translation of the 932 status codes | Site workers must be able to read the recovery steps | Plan the translation work | M5 |
 
-### 13.2 Inputs that are not in this repository yet
+### 13.2 Analysis material
 
-The analysis produced a folder named `woosh-analysis`. It is not checked in here. Ask the owner for it when you need it.
+The supplied analysis archive contains the 25 schemas, both UI string tables and 16 reference screenshots. WooshKit includes the restored schemas and generated Swift. The app carries its string catalog. Keep screenshots and extraction tools outside the app bundle.
 
 | Folder | Contents | Needed for | Goes to |
 |---|---|---|---|
 | `proto` | The 25 Woosh message definitions restored from the executables | M1: generating Swift message types | `Packages/WooshKit/Protos/` |
 | `ui-text` | Every UI string of both apps, Chinese original and English translation, by screen class | M2 onward: the Chinese and English UI strings, which are used unchanged. Also the basis for the Korean strings and for checking that no feature was missed | the `zh-Hans` and `en` values of the string catalog |
 | `screens` | 16 screenshots of the original apps | Screen layout reference | reference only; do not ship |
-| `tools` | The fake robot and the extraction scripts (Python) | Checking the dedicated channel format; recorded traffic for tests | reference for `FakeRobotTransport` |
+| `tools` (absent from the supplied archive) | The fake robot and the extraction scripts (Python) | Checking the dedicated channel format; recorded traffic for tests | reference for `FakeRobotTransport` |
 
-Without `proto`, M1 cannot start: the message types cannot be generated, and guessing field names is not allowed.
-
-Without `ui-text`, the Chinese and English strings cannot be filled in: they must match the original apps exactly, and writing new translations is not allowed. Screens can still be built in Korean first.
+The archive does not include recorded public-API sessions against a physical robot. The fake transport uses synthetic fixtures.
 
 The original executables also embed a status code table: 932 codes with recovery text, as JSON and as a four-sheet spreadsheet (electronic hardware, embedded software, algorithm system, application software). Do not add it to the repository until the owner confirms it may be used. Until then the app shows the raw code and the message the robot sent.
 

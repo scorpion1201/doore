@@ -1,0 +1,272 @@
+// recovered from embedded descriptor at file offset 0x4ca580 (4306 bytes)
+syntax = "proto3";
+package woosh.robot;
+
+import "woosh/proto/util/common.proto";
+import "woosh/proto/util/action.proto";
+import "woosh/proto/util/navigation.proto";
+import "woosh/proto/util/task.proto";
+import "woosh/proto/util/robot.proto";
+import "woosh/proto/robot/robot.proto";
+import "woosh/proto/robot/robot_count.proto";
+
+enum DeploymentType {
+  kDeploymentTypeUndefined = 0;
+  kBeacons = 1;
+  kArTags = 2;
+  kReflectors = 3;
+  kMark = 4;
+}
+
+enum DeploymentMode {
+  kDeploymentModeUndefined = 0;
+  kDepCollect = 1;
+  kDepCancel = 2;
+  kDepReflector = 3;
+}
+
+message InitRobot {
+  bool is_record = 1;
+  bool is_qrcode = 3;
+  woosh.common.Pose2D pose = 2;
+}
+
+message SetRobotPose {
+  woosh.common.Pose2D pose = 1;
+  bool is_qrcode = 2;
+}
+
+message EstimateRobotPose {
+  enum Method {
+    kMethodUndefined = 0;
+    kRecord = 1;
+    kQRcode = 2;
+    kLaserMatch = 3;
+  }
+  woosh.robot.EstimateRobotPose.Method method = 1;
+  repeated woosh.common.Pose2D map_range = 11;
+  woosh.common.Pose2D pose = 101;
+  uint32 confidence = 102;
+}
+
+message SetOccupancy {
+  bool occupy = 1;
+}
+
+message SetMuteCall {
+  bool mute = 1;
+}
+
+message SetProgramMute {
+  bool mute = 1;
+}
+
+message SetHoldMode {
+  bool hold = 1;
+}
+
+message SetCableMotion {
+  bool allow = 1;
+}
+
+message SwitchControlMode {
+  woosh.robot.ControlMode mode = 1;
+}
+
+message SwitchWorkMode {
+  woosh.robot.WorkMode mode = 1;
+}
+
+message SwitchFootPrint {
+  woosh.robot.FootPrint type = 1;
+  repeated woosh.common.Point model = 2;
+}
+
+message SwitchMap {
+  string scene_name = 1;
+  string map_name = 2;
+  bool user_reset = 6;
+  repeated woosh.common.FileData file_datas = 11;
+}
+
+message BuildMap {
+  enum BuildType {
+    kBuildTypeUndefined = 0;
+    kAdd = 1;
+    kUpdate = 2;
+    kCanel = 3;
+    kSave = 4;
+  }
+  woosh.robot.BuildMap.BuildType type = 1;
+  string scene_name = 2;
+  string map_name = 3;
+}
+
+message BuildMapData {
+  bytes map_data = 1;
+  uint32 width = 2;
+  uint32 height = 3;
+  float origin_x = 4;
+  float origin_y = 5;
+  float resolution = 7;
+  bytes mark_data = 21;
+}
+
+message CostmapData {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  string scene_name = 1;
+  string map_name = 2;
+  woosh.robot.FootPrint type = 3;
+  bytes map_data = 11;
+  uint32 width = 12;
+  uint32 height = 13;
+  float origin_x = 14;
+  float origin_y = 15;
+  float resolution = 17;
+}
+
+message Deployment {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.robot.DeploymentType type = 1;
+  woosh.robot.DeploymentMode mode = 2;
+  woosh.common.Pose2D pose = 11;
+}
+
+message DeploymentResponse {
+  message Marker {
+    uint64 id = 1;
+    woosh.common.Pose2D pose = 2;
+  }
+  message ErrorID {
+    fixed32 id1 = 1;
+    fixed32 id2 = 2;
+    fixed32 id3 = 3;
+  }
+  message ErrorIDGroup {
+    repeated woosh.robot.DeploymentResponse.ErrorID error_ids = 1;
+  }
+  woosh.robot.DeploymentType type = 1;
+  woosh.robot.DeploymentMode mode = 2;
+  repeated woosh.robot.DeploymentResponse.Marker markers = 3;
+  repeated woosh.robot.DeploymentResponse.ErrorIDGroup error_id_groups = 4;
+  fixed32 check_times = 5;
+}
+
+message ExecPreTask {
+  int32 task_set_id = 1;
+}
+
+message ExecTaskSet {
+  int32 repeat_times = 1;
+}
+
+message ExecTask {
+  int64 task_id = 1;
+  woosh.task.Type type = 2;
+  woosh.task.Direction direction = 3;
+  uint32 task_type_no = 4;
+  string mark_no = 5;
+  woosh.robot.PlanPath plan_path = 6;
+  woosh.common.Pose2D pose = 7;
+  uint32 map_id = 8;
+  bytes custom = 10;
+}
+
+message ActionOrder {
+  woosh.action.Order order = 1;
+}
+
+message PlanNavPath {
+  oneof commu {
+    uint32 robot_id = 199;
+  }
+  woosh.common.Pose2D start = 1;
+  woosh.common.Pose2D end = 2;
+  float tolerance = 11;
+}
+
+message ChangeNavPath {
+  woosh.robot.PlanPath paths = 1;
+}
+
+message ChangeNavMode {
+  woosh.nav.ModeSetting nav_mode = 1;
+  woosh.common.Pose2D in_point = 10;
+  woosh.common.Pose2D out_point = 11;
+}
+
+message Speak {
+  string text = 1;
+}
+
+message LED {
+  uint32 submodule = 1;
+  uint32 urgency = 2;
+  uint32 abnormal = 3;
+  uint32 normal = 4;
+  uint32 color = 5;
+}
+
+message Twist {
+  float linear = 1;
+  float angular = 2;
+  float linear_y = 12;
+}
+
+message Follow {
+  bool type = 1;
+}
+
+message RobotWiFi {
+  enum Order {
+    kOrderUndefined = 0;
+    kWiFiList = 1;
+    kAdd = 2;
+    kReconnect = 3;
+    kForget = 4;
+    kHotspot = 5;
+  }
+  woosh.robot.RobotWiFi.Order order = 1;
+  bytes content = 2;
+  bool is_connect_now = 3;
+  bool enable = 4;
+}
+
+message PowerOff {
+}
+
+message CountData {
+  enum Type {
+    kGet = 0;
+    kSync = 1;
+  }
+  enum CountType {
+    kAll = 0;
+    kOperation = 1;
+    kTask = 2;
+    kStatus = 3;
+  }
+  woosh.robot.CountData.Type req_type = 1;
+  woosh.robot.CountData.CountType count_type = 2;
+  woosh.common.TimeBucket bucket = 3;
+  repeated uint32 operation_id = 4;
+  repeated uint32 task_id = 5;
+  repeated uint32 status_id = 6;
+  int32 operation_page = 11;
+  int32 task_page = 12;
+  int32 status_page = 13;
+}
+
+message CountDataResponse {
+  woosh.robot.count.Operations operations = 1;
+  woosh.robot.count.Tasks tasks = 2;
+  woosh.robot.count.Abnormals abnormals = 3;
+  int32 operation_qty = 11;
+  int32 task_qty = 12;
+  int32 abnormal_qty = 13;
+}
+

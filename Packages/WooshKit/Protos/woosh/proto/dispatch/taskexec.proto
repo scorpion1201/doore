@@ -1,0 +1,75 @@
+// recovered from embedded descriptor at file offset 0x4cf5a0 (1206 bytes)
+syntax = "proto3";
+package woosh.dispatch.task;
+
+import "woosh/proto/util/task.proto";
+import "woosh/proto/task/task.proto";
+
+message FindTask {
+  enum ToSort {
+    kTaskSetID_Desc = 0;
+    kTaskSetID_Asc = 1;
+    kTimeEnd_Desc = 2;
+    kTimeEnd_Asc = 3;
+  }
+  message State {
+    woosh.task.TaskSetState gte = 1;
+    woosh.task.TaskSetState lte = 2;
+  }
+  message Time {
+    int32 gte = 1;
+    int32 lte = 2;
+  }
+  int32 id = 1;
+  woosh.dispatch.task.FindTask.State state = 2;
+  woosh.dispatch.task.FindTask.Time time = 3;
+  woosh.dispatch.task.FindTask.ToSort sort = 6;
+  uint32 robot = 11;
+  string route = 12;
+  bool only_external = 16;
+  int32 page = 21;
+}
+
+message TaskOrder {
+  int32 id = 1;
+  uint32 robot = 4;
+  uint32 task_id = 2;
+  woosh.task.Order order = 3;
+}
+
+message StickTask {
+  int32 id = 1;
+  bool unstick = 2;
+}
+
+message AddTask {
+  woosh.task.TaskSet tset = 1;
+}
+
+message ExecPreTask {
+  enum Order {
+    kAdd = 0;
+    kDel = 1;
+  }
+  int32 task_set_id = 1;
+  uint32 robot = 2;
+  int32 repeat_times = 3;
+  woosh.dispatch.task.ExecPreTask.Order order = 11;
+  int32 tset_id = 21;
+}
+
+message ExecPreTasks {
+  repeated woosh.dispatch.task.ExecPreTask tasks = 1;
+}
+
+message TaskState {
+  int32 id = 1;
+  int32 task_id = 2;
+  woosh.task.State state = 3;
+  int32 action_wait_id = 4;
+}
+
+message TaskSetState {
+  woosh.task.TaskSet tset = 1;
+}
+

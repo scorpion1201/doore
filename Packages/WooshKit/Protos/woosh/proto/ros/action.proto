@@ -1,0 +1,120 @@
+// recovered from embedded descriptor at file offset 0x4cc3a0 (2008 bytes)
+syntax = "proto3";
+package woosh.ros.action;
+
+import "woosh/proto/util/common.proto";
+
+enum ControlAction {
+  kCancel = 0;
+  kExecute = 1;
+  kPause = 2;
+  kResume = 3;
+}
+
+message ChargeControl {
+  enum ExecuteMode {
+    kNoneExecuteMode = 0;
+    kAuto = 1;
+    kExit = 2;
+  }
+  enum Mode {
+    kNoneMode = 0;
+    kCheck = 1;
+    kProcessctrl = 2;
+  }
+  woosh.ros.action.ChargeControl.ExecuteMode execute_mode = 1;
+  woosh.ros.action.ChargeControl.Mode mode = 2;
+  woosh.ros.action.ControlAction action = 11;
+}
+
+message LiftControl {
+  enum ExecuteMode {
+    kNoneExecuteMode = 0;
+    kUp = 1;
+    kDown = 2;
+  }
+  woosh.ros.action.LiftControl.ExecuteMode execute_mode = 1;
+  woosh.ros.action.ControlAction action = 11;
+}
+
+message LiftControl2 {
+  float height = 1;
+  woosh.ros.action.ControlAction action = 11;
+}
+
+message LiftControl3 {
+  enum ExecuteMode {
+    kQuery = 0;
+    kAbsolute = 1;
+    kRelative = 2;
+    kCalibration = 3;
+    kTsetMode = 4;
+  }
+  enum FlagsBit {
+    kFlagsBitUndefined = 0;
+    kFB0 = 1;
+    kFB1 = 2;
+    kFB2 = 4;
+    kFB3 = 8;
+    kFB4 = 16;
+    kFB5 = 32;
+    kFB6 = 64;
+    kFB7 = 128;
+  }
+  woosh.ros.action.LiftControl3.ExecuteMode execute_mode = 1;
+  float speed = 2;
+  float height = 3;
+  uint32 flags = 6;
+  woosh.ros.action.ControlAction action = 11;
+}
+
+message StepControl {
+  message Step {
+    enum Mode {
+      kNone = 0;
+      kStraight = 1;
+      kRotate = 2;
+      kLateral = 3;
+      kDiagonalize = 4;
+    }
+    woosh.ros.action.StepControl.Step.Mode mode = 1;
+    float value = 2;
+    float speed = 3;
+    float angle = 4;
+  }
+  repeated woosh.ros.action.StepControl.Step steps = 1;
+  int32 avoid = 2;
+  woosh.ros.action.ControlAction action = 11;
+}
+
+message MoveBase {
+  enum ExecutionMode {
+    kFree = 0;
+    kOneByOne = 1;
+  }
+  repeated woosh.common.Pose2D poses = 1;
+  woosh.common.Pose2D target_pose = 2;
+  woosh.ros.action.MoveBase.ExecutionMode execution_mode = 3;
+  woosh.ros.action.ControlAction action = 11;
+}
+
+message NavigationMode {
+  enum Mode {
+    kVagueAvoid = 0;
+    kAccurateAvoid = 1;
+    kWaitNav = 2;
+    kWaitAvoid = 3;
+  }
+  uint32 id = 1;
+  woosh.ros.action.NavigationMode.Mode mode = 2;
+  float wait_time = 3;
+  float max_speed = 4;
+  bool permitted_passage = 5;
+  int32 capacity = 6;
+}
+
+message AnyAction {
+  string type = 1;
+  bytes value = 2;
+}
+

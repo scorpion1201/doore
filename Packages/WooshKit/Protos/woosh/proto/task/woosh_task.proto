@@ -1,0 +1,109 @@
+// recovered from embedded descriptor at file offset 0x4c4f40 (1993 bytes)
+syntax = "proto3";
+package woosh.task;
+
+import "woosh/proto/task/task.proto";
+
+message WooshTask {
+  message Custom {
+    uint32 priority = 1;
+    bool executable = 2;
+  }
+  message Consta {
+    bool can_skip = 11;
+    bool fail_redo = 12;
+    bool fail_next = 13;
+    bool cancel_next = 14;
+    bool cancel_end = 21;
+    bool fail_end = 22;
+    bool cancel_skip = 26;
+    bool fail_skip = 27;
+  }
+  woosh.task.TaskBase base = 1;
+  woosh.task.TaskExec exec = 2;
+  woosh.task.WooshTask.Custom custom = 11;
+  woosh.task.WooshTask.Consta consta = 12;
+}
+
+message WooshTaskSet {
+  message Custom {
+    bool auto_complete = 1;
+  }
+  message Consta {
+    string token = 11;
+  }
+  woosh.task.TaskSetBase base = 1;
+  woosh.task.TaskSetExec exec = 2;
+  woosh.task.TaskSetTime time = 3;
+  repeated woosh.task.WooshTask tasks = 10;
+  woosh.task.WooshTaskSet.Custom custom = 11;
+  woosh.task.WooshTaskSet.Consta consta = 12;
+}
+
+message AddTask {
+  woosh.task.WooshTaskSet tset = 1;
+}
+
+message InsertTask {
+  int32 tset_id = 1;
+  woosh.task.WooshTask task = 2;
+}
+
+message RepeatTask {
+  enum Order {
+    kOrderUndefined = 0;
+    kPut = 1;
+    kDel = 2;
+    kExec = 3;
+  }
+  int32 times = 1;
+  woosh.task.WooshTaskSet task_set = 2;
+  uint32 addr = 11;
+  uint32 key = 12;
+  woosh.task.RepeatTask.Order order = 21;
+}
+
+message RepeatTasks {
+  repeated woosh.task.RepeatTask repeat_tasks = 1;
+}
+
+message CallInfo {
+  enum CallType {
+    kCallTypeUndefined = 0;
+    kAnd = 1;
+    kOr = 2;
+    kMsger = 3;
+  }
+  message Caller {
+    string mac_addr = 1;
+    uint32 key_id = 2;
+    bool triggered = 3;
+  }
+  message CallGuard {
+    woosh.task.CallInfo.CallType type = 1;
+    repeated woosh.task.CallInfo.Caller callers = 2;
+  }
+  message CallEvent {
+    woosh.task.CallInfo.Caller caller = 1;
+    woosh.task.CallInfo.CallGuard guard = 2;
+    uint32 release = 3;
+  }
+  woosh.task.CallInfo.CallType type = 1;
+  repeated woosh.task.CallInfo.CallEvent events = 2;
+  woosh.task.CallInfo.CallGuard guard = 3;
+}
+
+message CallTask {
+  woosh.task.CallInfo call_info = 1;
+  woosh.task.WooshTaskSet task_set = 2;
+}
+
+message CallTasks {
+  repeated woosh.task.CallTask call_tasks = 1;
+}
+
+message TaskInfo {
+  repeated woosh.task.RepeatTask repeat_tasks = 1;
+  repeated woosh.task.CallTask call_tasks = 2;
+}
+

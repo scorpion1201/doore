@@ -1,0 +1,114 @@
+// recovered from embedded descriptor at file offset 0x4c1c60 (2026 bytes)
+syntax = "proto3";
+package woosh.map;
+
+import "woosh/proto/util/common.proto";
+import "woosh/proto/map/mark.proto";
+import "woosh/proto/map/field.proto";
+import "woosh/proto/map/path.proto";
+import "woosh/proto/task/woosh_task.proto";
+
+message SceneList {
+  message Scene {
+    string name = 1;
+    repeated string maps = 2;
+  }
+  repeated woosh.map.SceneList.Scene scenes = 1;
+}
+
+message SceneData {
+  message Map {
+    uint32 id = 1;
+    string name = 2;
+    float resolution = 11;
+    woosh.common.Pose2D origin = 12;
+    woosh.common.Pose2D end = 13;
+    bytes map_png = 21;
+    bytes keepout_png = 22;
+    bytes traffic_keepout_png = 23;
+    woosh.map.mark.MarkInfo mark_info = 31;
+    woosh.map.field.FieldInfo field_info = 32;
+    woosh.map.path.PathInfo path_info = 33;
+    string time_write = 51;
+  }
+  string name = 1;
+  repeated woosh.map.SceneData.Map maps = 11;
+  woosh.task.TaskInfo task_info = 12;
+  string action_group = 13;
+}
+
+message SceneDataEasy {
+  message Map {
+    uint32 id = 1;
+    string name = 2;
+    string floor = 3;
+    int64 version = 4;
+    woosh.map.mark.Storages storages = 11;
+    repeated woosh.map.mark.Wormhole wormholes = 12;
+    repeated woosh.map.mark.ARTag artags = 13;
+    repeated woosh.map.mark.Reflector reflectors = 14;
+  }
+  string name = 1;
+  repeated woosh.map.SceneDataEasy.Map maps = 11;
+}
+
+message Download {
+  string scene_name = 1;
+  bool compress = 12;
+}
+
+message DownloadResponse {
+  repeated woosh.common.FileData file_datas = 1;
+  bool compress = 12;
+}
+
+message Upload {
+  enum Method {
+    kIncr = 0;
+    kFull = 1;
+  }
+  string scene_name = 1;
+  repeated woosh.common.FileData file_datas = 2;
+  woosh.map.Upload.Method method = 11;
+  bool compress = 12;
+}
+
+message Rename {
+  string old_scene_name = 1;
+  string new_scene_name = 2;
+  string old_map_name = 3;
+  string new_map_name = 4;
+}
+
+message Delete {
+  string scene_name = 1;
+  string map_name = 2;
+}
+
+message SceneFileMD5 {
+  message MapFileInfo {
+    string map_name = 1;
+    uint32 version = 2;
+    repeated woosh.common.FileMD5 map_md5s = 3;
+  }
+  string scene_name = 1;
+  repeated woosh.common.FileMD5 scenes_md5s = 2;
+  repeated woosh.map.SceneFileMD5.MapFileInfo maps = 3;
+}
+
+message SceneMd5 {
+  string scene_name = 1;
+}
+
+message SceneMd5Response {
+  repeated woosh.map.SceneFileMD5 scenes = 1;
+}
+
+message SceneSync {
+  repeated woosh.map.SceneFileMD5 scenes = 1;
+}
+
+message SceneSyncResponse {
+  repeated woosh.common.FileData file_datas = 1;
+}
+
